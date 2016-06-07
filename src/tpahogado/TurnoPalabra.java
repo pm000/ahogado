@@ -5,9 +5,6 @@
  */
 package tpahogado;
 
-//import java.util.ArrayList;
-import java.util.Hashtable;
-//import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -18,18 +15,22 @@ import java.util.Observer;
 public class TurnoPalabra implements Observer{
     
     private Palabra palabra;
-    private Hashtable palabraVisual = new Hashtable <String,String>();
-      
+    boolean disponible = true;
+    
     public TurnoPalabra(Palabra palabra){
         this.palabra = palabra;
-        for(int i=0;i<=palabra.cantidadLetras();i++){
-            palabraVisual.put(i, "-");
-        }
     }
     
+    public synchronized void dameTurno() throws InterruptedException{
+        while(!disponible){
+            wait();
+        }
+        disponible = false;
+    }
     
-    public void ponerOkLetraPalabra(int lugar){
-        palabraVisual
+    public synchronized  void devolverTurno() throws InterruptedException{
+        disponible = true;
+        notifyAll();
     }
     
     public void update(Observable O, Object status){
@@ -50,17 +51,4 @@ public class TurnoPalabra implements Observer{
         this.palabra = palabra;
     }
 
-    /**
-     * @return the palabraVisual
-     */
-    public List<String> getPalabraVisual() {
-        return palabraVisual;
-    }
-
-    /**
-     * @param palabraVisual the palabraVisual to set
-     */
-    public void setPalabraVisual(List<String> palabraVisual) {
-        this.palabraVisual = palabraVisual;
-    }
 }

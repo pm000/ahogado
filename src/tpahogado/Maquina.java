@@ -13,58 +13,78 @@ import java.util.List;
  * @author alejo
  */
 public class Maquina extends Jugador{
-       
-    List<String> abecedario;
-    List<String> letrasDadas;
-    private int jugadas;
-    private int aciertos;
-    
-    public void llenarAbecedario(){
-    for(int caracter=97;caracter<=117;caracter++){
-        abecedario.add(chrs(caracter));
-        }
-    }
-    
+
     public Maquina(TurnoPalabra tp, String nombre){
         super(tp,nombre);
-        this.abecedario = new ArrayList();
-        this.letrasDadas = new ArrayList();
-        this.jugadas = 0;
-        this.aciertos = 0;
-       // super(tp);
     }
 
     @Override
     public void run() {
+        while(!tp.hayGanador() && (vidas > 0)){
+            tp.dameTurno();
+            jugarLetra(buscarLetraAlAzar());
+        
+            
+            
+            tp.devolverTurno();
+        }
+     
+            //observame che hay q poner las instrucciones para observer
+               
         
     }
 
-    /**
-     * @return the jugadas
-     */
-    public int getJugadas() {
-        return jugadas;
+    public int elejirNumeroRandom(int limite){
+        //Math.random()*ValorLimite+ValorInicial
+        return (int) Math.random()*limite;
     }
+    
+    public String buscarLetraAlAzar(){
+        //contains(X) -> Retorna true si existe el elemento X en el ArrayList.
+        int numero = elejirNumeroRandom(abecedario.length);
+        String letra = abecedario[numero];
+        while (letrasDadas.contains(letra)){
+            numero = elejirNumeroRandom(abecedario.length);
+            letra = abecedario[numero];
+        }
+        return letra;
+    }
+    
+    public boolean seGanoONo(){
+    if (ubicacionLetrasAcertadas.contains("-"))
+        return false;
+    else
+        return true;
+    }
+    
+    public void jugarLetra(String letra){
+        if (vidas > 0){
+            jugadas++;
+            String palabra = getTp().getPalabra().getPalabra();
+            int posicion = palabra.indexOf(letra);
+            //GUARDO LA LETRA JUGADA
+            letrasDadas.add(letra);
+            if (posicion != -1){
+                //ESTA LETRA SE ENCUENTRA A LO SUMO UNA VEZ EN LA PALABRA BUSCADA
+                //SUMO UN ACIERTO
+                aciertos++;
+                //MARCO LA POSICION ACERTADA EN LA PALABRA
+                ubicacionLetrasAcertadas.set(posicion,"*");
+                //ME FIJO SI LA MISMA LETRA ESTA MÁS VECES EN LA PALABRA      
+                while (posicion != -1){
+                    posicion = palabra.indexOf(letra);
+                    ubicacionLetrasAcertadas.set(posicion,"*");
+                }
+            }else{
+                if (posicion == -1){
+                    //LA LETRA NO ESTA EN LA PALABRA
+                    //DESCUENTO LA VIDA
+                    vidas--;
+                }
+            }
+        }
 
-    /**
-     * @param jugadas the jugadas to set
-     */
-    public void setJugadas(int jugadas) {
-        this.jugadas = jugadas;
     }
-
-    /**
-     * @return the aciertos
-     */
-    public int getAciertos() {
-        return aciertos;
-    }
-
-    /**
-     * @param aciertos the aciertos to set
-     */
-    public void setAciertos(int aciertos) {
-        this.aciertos = aciertos;
-    }
+    
     
 }
