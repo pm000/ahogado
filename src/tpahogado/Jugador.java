@@ -23,12 +23,11 @@ public abstract class Jugador extends Observable implements Runnable{
     protected List<String> letrasDadas;
     //LISTA PARA SABER QUE LETRAS SE ADIVINARON Y CUALES NO
     protected List<String> ubicacionLetrasAcertadas;
-    
     protected String nombre;
     protected int vidas = 5;
     protected int jugadas = 0;
     protected int aciertos = 0;
-    protected boolean ganador = false;
+    private boolean ganador = false;
     
     public Jugador(TurnoPalabra tp, String nombre){
         this.tp = tp;
@@ -110,6 +109,20 @@ public abstract class Jugador extends Observable implements Runnable{
      */
     public void setAciertos(int aciertos) {
         this.aciertos = aciertos;
+    }
+
+    /**
+     * @return the ganador
+     */
+    public boolean isGanador() {
+        return ganador;
+    }
+
+    /**
+     * @param ganador the ganador to set
+     */
+    public void setGanador(boolean ganador) {
+        this.ganador = ganador;
     }
     
      

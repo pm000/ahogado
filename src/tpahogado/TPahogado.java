@@ -16,6 +16,14 @@ public class TPahogado {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        Palabra palabra = new Palabra("hola");
+        TurnoPalabra turnopalabra = new TurnoPalabra(palabra);
+        Maquina maq1 = new Maquina(turnopalabra,"Maq1");
+        Humano humano = new Humano(turnopalabra,"Pablo");
+        new Thread(maq1).start();
+        new Thread(humano).start();
+
     }
     
 }
